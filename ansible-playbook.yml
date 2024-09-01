@@ -18,8 +18,14 @@
         tar -xvf node_exporter-1.8.2.linux-amd64.tar.gz
         cd node_exporter-1.8.2.linux-amd64
         nohup ./node_exporter > /dev/null 2>&1 &
+
+    - name: Download a file from the internet
+      get_url:
+        url: https://github.com/lax66/star-agile-banking-finance_CAP01/blob/master/prometheus.yml
+        dest: /home/ubuntu/prometheus.yml
+    
     - name: run prometheus container
-      command: docker run -d -p 9090:9090 --name prometheus -v /var/lib/jenkins/workspace/capstone1/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+      command: docker run -d -p 9090:9090 --name prometheus -v /home/ubuntu/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 
     - name: run grafana container
       command: docker run -d -p 3000:3000 --name grafana grafana/grafana
