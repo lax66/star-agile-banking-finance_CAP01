@@ -6,7 +6,7 @@
       apt:
         upgrade: dist
         update_cache: yes
-    - name: Installing maven and docker
+    - name: Installing and docker
       apt:
         name: docker.io
     - name: Deploy Docker Container
