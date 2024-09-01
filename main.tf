@@ -22,7 +22,7 @@ resource "aws_instance" "server" {
   key_name = "key02"
 
   tags = {
-    Name = var.instance_name
+    Name = "${terraform.workspace}_server"
   }
   provisioner "remote-exec" {
     inline = [
