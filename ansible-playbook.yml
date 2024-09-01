@@ -19,7 +19,7 @@
         cd node_exporter-1.8.2.linux-amd64
         nohup ./node_exporter > /dev/null 2>&1 &
 
-    - name: Download a file from the internet
+    - name: Download prometheus.yml from the repo
       get_url:
         url: https://github.com/lax66/star-agile-banking-finance_CAP01/blob/master/prometheus.yml
         dest: /home/ubuntu/prometheus.yml
