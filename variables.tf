@@ -10,7 +10,7 @@ variable "root_pass" {
 
 variable "instance_name" {
   type    = string
-  default = "${terraform.workspace}_server"
+  default = "server"
 }
 
 
