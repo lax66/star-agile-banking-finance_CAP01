@@ -11,3 +11,17 @@
         name: docker.io
     - name: Deploy Docker Container
       command: docker run -itd -p 8084:8081 laxg66/capstone01:v1
+
+    - name: getting node exporter
+      shell: |
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+        tar -xvf node_exporter-1.8.2.linux-amd64.tar.gz
+        cd node_exporter-1.8.2.linux-amd64
+        nohup ./node_exporter &
+
+        echo ""
+    - name: run prometheus container
+      command: docker run -d -p 9090:9090 --name prometheus -v /home/ubuntu/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+
+    - name: run grafana container
+      command: docker run -d -p 3000:3000 --name grafana grafana/grafana
