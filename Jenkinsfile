@@ -12,7 +12,7 @@ pipeline {
               
             }
         }
-        stage('Build docker image'){
+        stage('Building docker image'){
             steps{
                 script{
                     sh 'docker build -t laxg66/capstone01:v1 .'
