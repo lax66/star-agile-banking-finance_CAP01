@@ -1,9 +1,13 @@
 pipeline {
     agent any
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+    }
     stages{
         stage('build project'){
             steps{
-                git url:'https://github.com/akshu20791/pro1/', branch: "master"
+                git 'https://github.com/lax66/star-agile-banking-finance_CAP01.git'
                 sh 'mvn clean package'
               
             }
@@ -11,18 +15,52 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t akshu20791/staragileprojectfinance:v1 .'
+                    sh 'docker build -t laxg66/capstone01:v1 .'
                     sh 'docker images'
                 }
             }
         }
-         
-        
-     stage('Deploy') {
-            steps {
-                sh 'sudo docker run -itd --name My-first-containe21211 -p 8083:8081 akshu20791/staragileprojectfinance:v1'
-                  
+        stage('push to docker-hub'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh "echo $PASS | docker login -u $USER --password-stdin"
+                    sh 'docker push laxg66/capstone01:v1'
                 }
             }
+        }
         
+        stage('Terraform Operations for test workspace') {
+            steps {
+                sh '''
+                terraform workspace select test || terraform workspace new test
+                terraform init
+                terraform plan
+                terraform destroy -auto-approve
+                '''
+            }
+        }
+       stage('Terraform destroy & apply for test workspace') {
+            steps {
+                sh 'terraform apply -auto-approve'
+            }
+       }
+       stage('Terraform Operations for Production workspace') {
+            when {
+                expression { return currentBuild.currentResult == 'SUCCESS' }
+            }
+            steps {
+                sh '''
+                terraform workspace select prod || terraform workspace new prod
+                terraform init
+                if terraform state show aws_key_pair.example 2>/dev/null; then
+                    echo "Key pair already exists in the prod workspace"
+                else
+                    terraform import aws_key_pair.example key02 || echo "Key pair already imported"
+                fi
+                terraform destroy -auto-approve
+                terraform apply -auto-approve
+                '''
+            }
+       }
     }
+}
