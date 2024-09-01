@@ -1,16 +1,13 @@
-- name : Configure Docker on EC2 Instances
-  hosts : all
-  become: true
-  connection : ssh
-  tasks : 
-  - name: updating apt
-    command : sudo apt-get update
-
-  - name : Install Docker
-    command : sudo apt-get install -y docker.io
-
-  - name : Start Docker Service
-    command : sudo systemctl start docker
-
-  - name: Deploy Docker Container
-    command: docker run -itd -p 8084:8081 shubhamkushwah123/finance-me:1.0
+- hosts: all
+  become: yes
+  name: installing packages,building and containerize the application
+  tasks:
+    - name: updating the machine
+      apt:
+        upgrade: dist
+        update_cache: yes
+    - name: Installing maven and docker
+      apt:
+        name: docker.io
+    - name: Deploy Docker Container
+      command: docker run -itd -p 8084:8081 laxg66/capstone01:v1
