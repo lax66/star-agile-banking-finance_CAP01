@@ -21,7 +21,7 @@
 
         echo ""
     - name: run prometheus container
-      command: docker run -d -p 9090:9090 --name prometheus -v /home/ubuntu/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+      command: docker run -d -p 9090:9090 --name prometheus -v prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 
     - name: run grafana container
       command: docker run -d -p 3000:3000 --name grafana grafana/grafana
