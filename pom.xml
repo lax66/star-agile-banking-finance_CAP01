@@ -38,10 +38,10 @@
                 </dependency>
 
                 <dependency>
-                        <groupId>org.testng</groupId>
-                        <artifactId>testng</artifactId>
-                        <version>7.4.0</version>
-                        <scope>test</scope>
+                         <groupId>org.testng</groupId>
+                         <artifactId>testng</artifactId>
+                         <version>7.4.0</version>
+                         <scope>test</scope>
                 </dependency>
 
         </dependencies>
@@ -57,9 +57,11 @@
                                 <artifactId>maven-surefire-plugin</artifactId>
                                 <version>3.0.0-M5</version>
                                 <configuration>
-                                        <includes>
-                                                <include>**/*Test.java</include>
-                                        </includes>
+                                        <suiteXmlFiles>
+                                                <!-- Point to your TestNG XML file (e.g., testng.xml) -->
+                                                <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                                        </suiteXmlFiles>
+                                        <reportsDirectory>target/surefire-reports</reportsDirectory>
                                 </configuration>
                         </plugin>
 
